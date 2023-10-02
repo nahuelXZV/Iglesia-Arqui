@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+    <title>Ministerios</title>
+</head>
+
+<body class="bg-gray-100">
+    <nav class="bg-white border-gray-200  mb-5">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="https://flowbite.com/" class="flex items-center">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap  uppercase">Iglesia</span>
+            </a>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul
+                    class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white ">
+                    <li>
+                        <a href="#"
+                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                            aria-current="page">
+                            Miembros
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
+                            Ministerios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
+                            Cargos
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- titulo que diga ministerios -->
+    <div class="flex justify-center mb-5">
+        <h1 class="text-3xl font-bold">Ministerios</h1>
+    </div>
+
+    <div class="grid grid-cols-2 px-10 pt-2">
+        <div class="px-5 bg-white m-3 p-5 border rounded-md">
+            <form id="formulario" class="formulario">
+                <div class="hidden mb-2" id="id-card">
+                    <label for="id" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        ID</label>
+                    <input type="number" id="id" name="id" readonly
+                        class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="" required>
+                </div>
+                <div class="mb-4">
+                    <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Nombre</label>
+                    <input type="text" id="nombre" name="nombre"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="Nombre..." required>
+                </div>
+
+                <button type="submit"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+            </form>
+        </div>
+
+        <div class="relative overflow-x-auto px-5 bg-white m-3 p-5 border rounded-md">
+            <table class="w-full text-sm text-left text-gray-500 ">
+                <thead class="text-xs text-gray-800 uppercase bg-gray-200">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nombre
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (datos) { %>
+                        <% datos.forEach((dato)=> { %>
+                            <tr class="bg-white border border-1 ">
+                                <td class="px-6 py-4">
+                                    <%= dato.id %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.nombre %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button class="text-blue-400 hover:text-blue-600" onclick="ponerDatosForm(event)"
+                                        data-id="<%= dato.id %>" data-nombre="<%= dato.nombre %>">
+                                        Actualizar
+                                    </button>
+                                    <button class="text-blue-400 hover:text-blue-600" onclick="eliminarDatos(event)"
+                                        data-id="<%= dato.id %>">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <p>No hay datos disponibles.</p>
+                                    <% } %>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <script>
+        function enviarDatos(event) {
+            event.preventDefault();
+            const formulario = document.getElementById('formulario');
+            const formData = new FormData(formulario);
+            const datos = {};
+            formData.forEach((valor, clave) => {
+                datos[clave] = valor;
+            });
+            const metodo = datos.id ? 'PUT' : 'POST';
+            const message = datos.id ? 'actualizado' : 'creado';
+            const endPoint = datos.id ? `/ministerio/${datos.id}` : '/ministerio';
+            console.log('datos:', datos);
+            console.log('metodo:', metodo);
+            fetch(endPoint, {
+                method: metodo,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos)
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    alert('Ministerio ' + message + ' correctamente');
+                    location.reload();
+                })
+                .catch(err => console.log(err));
+        }
+        const formulario = document.getElementById('formulario');
+        formulario.addEventListener('submit', enviarDatos);
+
+
+        function eliminarDatos(event) {
+            const id = event.currentTarget.getAttribute('data-id');
+            console.log('Eliminar el dato con el id:', id);
+            fetch(`/ministerio/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    alert('Ministerio eliminado correctamente');
+                    location.reload();
+                })
+                .catch(err => console.log(err));
+        }
+
+        function ponerDatosForm(event) {
+            const id = event.currentTarget.getAttribute('data-id');
+            const nombre = event.currentTarget.getAttribute('data-nombre');
+            const formulario = document.getElementById('formulario');
+            const nombreInput = document.getElementById('nombre');
+            const idInput = document.getElementById('id');
+            const idCard = document.getElementById('id-card');
+            nombreInput.value = nombre;
+            idInput.value = id;
+            idCard.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
