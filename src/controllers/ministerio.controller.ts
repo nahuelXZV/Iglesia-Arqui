@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Ministerio, MinisterioModel } from '../models/ministerio.model';
+import { Ministerio, MinisterioModel } from '../models/';
 
 export class MinisterioController {
 
@@ -10,7 +10,8 @@ export class MinisterioController {
     }
 
     public index = async (req: Request, res: Response) => {
-        const data: Ministerio[] | undefined = await new MinisterioModel(undefined).getAll();
+        this.ministerioModel = new MinisterioModel(undefined);
+        const data: Ministerio[] | undefined = await this.ministerioModel.getAll();
         res.render('ministerio', { datos: data });
     };
 
@@ -25,7 +26,6 @@ export class MinisterioController {
     public update = (req: Request, res: Response) => {
         const { nombre } = req.body;
         const { id } = req.params;
-        console.log(id, nombre);
         this.ministerioModel = new MinisterioModel({
             id: +id,
             nombre
@@ -35,8 +35,9 @@ export class MinisterioController {
     };
 
     public delete = async (req: Request, res: Response) => {
+        this.ministerioModel = new MinisterioModel(undefined);
         const { id } = req.params;
-        await new MinisterioModel(undefined).delete(+id);
+        await this.ministerioModel.delete(+id);
         res.json({ status: 'Ministerio eliminado' });
     };
 
