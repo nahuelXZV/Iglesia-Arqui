@@ -12,7 +12,7 @@ export class MinisterioController {
     public index = async (req: Request, res: Response) => {
         this.ministerioModel = new MinisterioModel(undefined);
         const data: Ministerio[] | undefined = await this.ministerioModel.getAll();
-        res.render('ministerio', { datos: data });
+        res.render('ministerioView', { ministerios: data });
     };
 
     public store = (req: Request, res: Response) => {

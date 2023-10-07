@@ -91,7 +91,6 @@ export class CargoModel {
     private async formatearDatos(data: QueryResult): Promise<Cargo[]> {
         const { rows } = data;
         return rows.map((item: any) => {
-            console.log(item);
             const { nombre, id, descripcion, ministerio_id, ministerio } = item;
             return {
                 id,

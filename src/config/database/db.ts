@@ -33,7 +33,6 @@ export class db implements DBConection {
     public async connect(): Promise<Client> {
         try {
             await this.client.connect();
-            console.log('Conexión a la base de datos establecida');
         } catch (error) {
             console.error('Error al conectar a la base de datos:', error);
         }
@@ -42,6 +41,5 @@ export class db implements DBConection {
 
     public async disconnect(): Promise<void> {
         await this.client.end();
-        console.log('Conexión a la base de datos cerrada');
     }
 }

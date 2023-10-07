@@ -16,7 +16,7 @@ export class CargoController {
         this.ministerioModel = new MinisterioModel(undefined);
         const data: Cargo[] | undefined = await this.cargoModel.getAll();
         const ministerios: Ministerio[] | undefined = await this.ministerioModel.getAll();
-        res.render('cargo', { datos: data, ministerios });
+        res.render('cargoView', { datos: data, ministerios });
     };
 
     public store = (req: Request, res: Response) => {
