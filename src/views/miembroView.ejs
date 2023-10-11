@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+    <title>Miembros</title>
+</head>
+
+<body class="bg-gray-100">
+    <nav class="bg-white border-gray-200  mb-5">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="https://flowbite.com/" class="flex items-center">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap  uppercase">Iglesia</span>
+            </a>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul
+                    class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white ">
+                    <li>
+                        <a href="/ministerio"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
+                            Ministerios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/cargo"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
+                            Cargos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/miembros"
+                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
+                            Miembros </a>
+                    </li>
+                    <li>
+                        <a href="/eventos"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
+                            Eventos
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- titulo que diga ministerios -->
+    <div class="flex justify-center mb-5">
+        <h1 class="text-3xl font-bold">Miembros</h1>
+    </div>
+
+    <div class="grid grid-cols-2 px-10 pt-2">
+        <div class="px-5 bg-white m-3 p-5 border rounded-md">
+            <form id="formulario" class="formulario grid grid-cols-2 gap-2">
+                <div class="hidden mb-2" id="id-card">
+                    <label for="id" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        ID</label>
+                    <input type="number" id="id" name="id" readonly
+                        class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="" required>
+                </div>
+                <div class="mb-2">
+                    <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Nombre</label>
+                    <input type="text" id="nombre" name="nombre"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="Nombre..." required>
+                </div>
+
+                <div class="mb-2">
+                    <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Telefono</label>
+                    <input type="text" id="telefono" name="telefono"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="Telefono..." required>
+                </div>
+
+                <div class="mb-2">
+                    <label for="correo" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Correo</label>
+                    <input type="text" id="correo" name="correo"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="Correo..." required>
+                </div>
+
+                <div class="mb-2">
+                    <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Direccion</label>
+                    <input type="text" id="direccion" name="direccion"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="Direccion..." required>
+                </div>
+
+                <div class="mb-2">
+                    <label for="fecha_nacimiento" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Fecha Nacimiento</label>
+                    <input type="Date" id="fecha_nacimiento" name="fecha_nacimiento"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        placeholder="Direccion..." required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Invitador</label>
+                    <select id="miembro_id_invitador" name="miembro_id_invitador"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                        <option selected>Escoge un miembro
+                        <option>
+                            <% if (datos) { %>
+                                <% datos.forEach((miembro)=> { %>
+                        <option value="<%= miembro.id %>">
+                            <%= miembro.nombre %>
+                        </option>
+                        <% }); %>
+                            <% } else { %>
+                                <p>No hay datos disponibles.</p>
+                                <% } %>
+                    </select>
+                </div>
+                <!-- titulo de familia -->
+                <div class="flex justify-center mb-1 col-span-2">
+                    <h1 class="text-xl font-bold">Familia</h1>
+                </div>
+
+                <div class="mb-4">
+                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Miembro</label>
+                    <select id="miembro_id_relacion" name="miembro_id_relacion"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                        <option selected>Escoge un miembro
+                        <option>
+                            <% if (datos) { %>
+                                <% datos.forEach((miembro)=> { %>
+                        <option value="<%= miembro.id %>">
+                            <%= miembro.nombre %>
+                        </option>
+                        <% }); %>
+                            <% } else { %>
+                                <p>No hay datos disponibles.</p>
+                                <% } %>
+                    </select>
+                </div>
+                <div class="grid grid-cols-3">
+                    <div class="col-span-2">
+                        <label for="countries" class=" mb-2 text-sm font-medium text-gray-900 ">
+                            Tipo de relacion</label>
+                        <select id="tipo_relacion" name="tipo_relacion"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                            <option selected>Escoge una relacion</option>
+                            <option>Padre</option>
+                            <option>Madre</option>
+                            <option>Hermano</option>
+                            <option>Hermana</option>
+                            <option>Abuela</option>
+                            <option>Abuelo</option>
+                            <option>Tio</option>
+                            <option>Tia</option>
+                        </select>
+                    </div>
+                    <!-- boton de add -->
+                    <div class="flex items-center justify-center mb-1 ">
+                        <button type="button"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                            onclick="addFamilia()">Add</button>
+                    </div>
+                </div>
+
+                <div class="relative overflow-x-auto px-5 bg-white m-3 p-5 border rounded-md col-span-2">
+                    <table class="w-full text-sm text-left text-gray-500 ">
+                        <thead class="text-xs text-gray-800 uppercase bg-gray-200">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Relacion
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Miembro
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Acciones
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (datos) { %>
+                                <% datos.forEach((dato)=> { %>
+                                    <tr class="bg-white border border-1 ">
+                                        <td class="px-6 py-4">
+                                            <%= dato.id %>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <%= dato.nombre %>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <button class="text-blue-400 hover:text-blue-600"
+                                                onclick="eliminarDatos(event)" data-id="<%= dato.id %>">
+                                                Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <p>No hay datos disponibles.</p>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="">
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+                    <button type="submit" onclick="limpiarForm()"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Limpiar</button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="relative overflow-x-auto px-5 bg-white m-3 p-5 border rounded-md">
+            <table class="w-full text-sm text-left text-gray-500 ">
+                <thead class="text-xs text-gray-800 uppercase bg-gray-200">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nombre
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Telefono
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Correo
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Direccion
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Fecha Nacimiento
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (datos) { %>
+                        <% datos.forEach((dato)=> { %>
+                            <tr class="bg-white border border-1 ">
+                                <td class="px-6 py-4">
+                                    <%= dato.id %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.nombre %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.telefono%>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.correo %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.direccion %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.fecha_nacimiento %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button class="text-blue-400 hover:text-blue-600" onclick="ponerDatosForm(event)"
+                                        data-id="<%= dato.id %>" data-nombre="<%= dato.nombre %>"
+                                        data-telefono="<%= dato.telefono %>" data-correo="<%= dato.correo %> "
+                                        data-direccion="<%= dato.direccion %>"
+                                        data-fecha_nacimiento="<%= dato.fecha_nacimiento %> ">
+                                        Actualizar
+                                    </button>
+                                    <button class="text-blue-400 hover:text-blue-600" onclick="eliminarDatos(event)"
+                                        data-id="<%= dato.id %>">
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                                <% } else { %>
+                                    <p>No hay datos disponibles.</p>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <script>
+        function reload() {
+            location.reload();
+        }
+
+        function enviarDatos(event) {
+            event.preventDefault();
+            const formulario = document.getElementById('formulario');
+            const formData = new FormData(formulario);
+            const datos = {};
+            formData.forEach((valor, clave) => { datos[clave] = valor; });
+            const metodo = datos.id ? 'PUT' : 'POST';
+            const message = datos.id ? 'actualizado' : 'creado';
+            const endPoint = datos.id ? `/miembros/${datos.id}` : '/miembros';
+            fetch(endPoint, {
+                method: metodo,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            }).then(data => {
+                alert('Miembro ' + message + ' correctamente');
+                reload();
+            }).catch(err => console.log(err));
+        }
+        const formulario = document.getElementById('formulario');
+        formulario.addEventListener('submit', enviarDatos);
+
+        function eliminarDatos(event) {
+            const id = event.currentTarget.getAttribute('data-id');
+            console.log('Eliminar el dato con el id:', id);
+            fetch(`/miembros/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    alert('Mimebro eliminado correctamente');
+                    location.reload();
+                })
+                .catch(err => console.log(err));
+        }
+
+        function ponerDatosForm(event) {
+            const id = event.currentTarget.getAttribute('data-id');
+            const nombre = event.currentTarget.getAttribute('data-nombre');
+            const telefono = event.currentTarget.getAttribute('data-telefono');
+            const correo = event.currentTarget.getAttribute('data-correo');
+            const direccion = event.currentTarget.getAttribute('data-direccion');
+            const fecha_nacimiento = event.currentTarget.getAttribute('data-fecha_nacimiento');
+
+            const formulario = document.getElementById('formulario');
+            const idCard = document.getElementById('id-card');
+
+            const nombreInput = document.getElementById('nombre');
+            const idInput = document.getElementById('id');
+            const telefonoInput = document.getElementById('telefono');
+            const correoInput = document.getElementById('correo');
+            const direccionInput = document.getElementById('direccion');
+            const fecha_nacimientoInput = document.getElementById('fecha_nacimiento');
+
+            nombreInput.value = nombre;
+            idInput.value = id;
+            telefonoInput.value = telefono;
+            correoInput.value = correo;
+            direccionInput.value = direccion;
+            fecha_nacimientoInput.value = fecha_nacimiento;
+
+            idCard.style.display = 'block';
+        }
+
+        function limpiarForm() {
+            const nombreInput = document.getElementById('nombre');
+            const idInput = document.getElementById('id');
+            const idCard = document.getElementById('id-card');
+            const descripcionInput = document.getElementById('descripcion');
+            nombreInput.value = '';
+            idInput.value = '';
+            descripcionInput.value = '';
+            idCard.style.display = 'none';
+        }
+
+    </script>
+</body>
+
+</html>

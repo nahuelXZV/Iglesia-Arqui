@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { MinisterioController, CargoController } from '../../controllers/';
+import { MinisterioController, CargoController, MiembroController } from '../../controllers/';
 
 export class AppRoutes {
 
@@ -19,6 +19,13 @@ export class AppRoutes {
         router.post('/cargo', cargoController.store);
         router.put('/cargo/:id', cargoController.update);
         router.delete('/cargo/:id', cargoController.delete);
+
+        // Miembro
+        const miembroController = new MiembroController();
+        router.get('/miembros', miembroController.index);
+        router.post('/miembros', miembroController.store);
+        router.put('/miembros/:id', miembroController.update);
+        router.delete('/miembros/:id', miembroController.delete);
 
         return router;
     }
