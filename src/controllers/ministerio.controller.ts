@@ -3,11 +3,7 @@ import { Ministerio, MinisterioModel } from '../models/';
 
 export class MinisterioController {
 
-    private ministerioModel: MinisterioModel;
-
-    constructor() {
-        this.ministerioModel = new MinisterioModel(undefined);
-    }
+    private ministerioModel?: MinisterioModel;
 
     public index = async (req: Request, res: Response) => {
         this.ministerioModel = new MinisterioModel(undefined);

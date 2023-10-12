@@ -145,7 +145,7 @@
                 body: JSON.stringify(datos)
             }).then(data => {
                 alert('Ministerio ' + message + ' correctamente');
-                this.reload();
+                reload();
             }).catch(err => console.log(err));
         }
         const formulario = document.getElementById('formulario');
@@ -163,7 +163,7 @@
                 .then(data => {
                     console.log(data);
                     alert('Ministerio eliminado correctamente');
-                    location.reload();
+                    reload();
                 })
                 .catch(err => console.log(err));
         }

@@ -3,20 +3,15 @@ import { CargoModel, Cargo, MinisterioModel, Ministerio } from '../models';
 
 export class CargoController {
 
-    private cargoModel: CargoModel;
-    private ministerioModel: MinisterioModel;
-
-    constructor() {
-        this.cargoModel = new CargoModel(undefined);
-        this.ministerioModel = new MinisterioModel(undefined);
-    }
+    private cargoModel?: CargoModel;
+    private ministerioModel?: MinisterioModel;
 
     public index = async (req: Request, res: Response) => {
         this.cargoModel = new CargoModel(undefined);
         this.ministerioModel = new MinisterioModel(undefined);
         const data: Cargo[] | undefined = await this.cargoModel.getAll();
         const ministerios: Ministerio[] | undefined = await this.ministerioModel.getAll();
-        res.render('cargoView', { datos: data, ministerios });
+        res.render('cargoView', { cargos: data, ministerios });
     };
 
     public store = (req: Request, res: Response) => {
