@@ -1,5 +1,12 @@
 import { QueryResult } from "pg";
 import { DBConection, db } from "../config/database/db";
+import { Relacion, RelacionModel } from "./relacion.model";
+
+export interface RelacionRequest {
+    miembro: string;
+    miembro_id_relacionado: number;
+    tipo_relacion: string;
+}
 
 export interface Miembro {
     id?: number;
@@ -9,12 +16,13 @@ export interface Miembro {
     direccion: string;
     fecha_nacimiento: string;
     miembro_id_invitador?: number;
-    relaciones?: number[];
+    relaciones?: RelacionRequest[];
 }
 
 export class MiembroModel {
 
     private dbConexion: DBConection;
+    private relacionModel?: RelacionModel;
     public id: number;
     public nombre: string;
     public telefono: string;
@@ -22,7 +30,7 @@ export class MiembroModel {
     public direccion: string;
     public fecha_nacimiento: string;
     public miembro_id_invitador?: number;
-    public relaciones?: number[];
+    public relaciones?: RelacionRequest[];
 
     constructor(data: Miembro | undefined) {
         this.id = data?.id || 0;
@@ -38,9 +46,26 @@ export class MiembroModel {
 
     public async getAll(): Promise<Miembro[] | undefined> {
         const client = await this.dbConexion.connect();
+        const relacionModel = new RelacionModel(undefined);
         try {
-            const result = await client.query('SELECT miembro.* FROM miembro');
-            return await this.formatearDatos(result);
+            const result = await client.query('SELECT miembro.* FROM miembro ');
+            const relacionesTotal = await relacionModel.getAll() || [];
+            const miembros = await this.formatearDatos(result);
+            const miembrosResult = miembros.map((item: Miembro) => {
+                const { id } = item;
+                const relacionesMiembro = relacionesTotal.filter((item: Relacion) => item.miembro_id_base === id)
+                const relaciones: RelacionRequest[] = [];
+                relacionesMiembro.forEach((item: Relacion) => {
+                    const { tipo_relacion, miembro_id_relacionado, nombre_miembro } = item;
+                    relaciones.push({
+                        tipo_relacion,
+                        miembro_id_relacionado,
+                        miembro: nombre_miembro || ""
+                    });
+                });
+                return { ...item, relaciones };
+            });
+            return miembrosResult;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
         } finally {
@@ -73,6 +98,10 @@ export class MiembroModel {
                 this.direccion,
                 this.fecha_nacimiento
             ]);
+            this.formatearRelaciones(this.relaciones || []).forEach(async (item: Relacion) => {
+                this.relacionModel = new RelacionModel(item);
+                await this.relacionModel.store();
+            });
             return result;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
@@ -92,6 +121,11 @@ export class MiembroModel {
                 this.fecha_nacimiento,
                 this.id
             ]);
+            await new RelacionModel(undefined).deleteByMiembro(this.id);
+            this.formatearRelaciones(this.relaciones || []).forEach(async (item: Relacion) => {
+                this.relacionModel = new RelacionModel(item);
+                await this.relacionModel.store();
+            });
             return result;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
@@ -112,6 +146,19 @@ export class MiembroModel {
         }
     }
 
+    private formatearRelaciones(relaciones: RelacionRequest[]): Relacion[] {
+        return relaciones.map((item: RelacionRequest) => {
+            const { miembro_id_relacionado, tipo_relacion } = item;
+            return {
+                id: 0,
+                tipo_relacion,
+                miembro_id_base: this.id,
+                miembro_id_relacionado
+            }
+        });
+    }
+
+
     private async formatearDatos(data: QueryResult): Promise<Miembro[]> {
         const { rows } = data;
         return rows.map((item: any) => {
@@ -122,8 +169,6 @@ export class MiembroModel {
                 correo: item.correo,
                 direccion: item.direccion,
                 fecha_nacimiento: item.fecha_nacimiento.toISOString().split('T')[0],
-                miembro_id_invitador: item.miembro_id_invitador,
-                relaciones: item.relaciones
             }
         });
     }
@@ -137,8 +182,6 @@ export class MiembroModel {
             correo: rows[0].correo,
             direccion: rows[0].direccion,
             fecha_nacimiento: rows[0].fecha_nacimiento.toISOString().split('T')[0],
-            miembro_id_invitador: rows[0].miembro_id_invitador,
-            relaciones: rows[0].relaciones
         }
     }
 }

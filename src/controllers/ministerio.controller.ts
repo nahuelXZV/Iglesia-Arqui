@@ -1,40 +1,45 @@
 import { Request, Response } from 'express';
 import { Ministerio, MinisterioModel } from '../models/';
+import { MinisterioView, MinisterioOptions } from '../views/';
 
 export class MinisterioController {
 
     private ministerioModel?: MinisterioModel;
+    private ministerioView?: MinisterioView;
 
     public index = async (req: Request, res: Response) => {
         this.ministerioModel = new MinisterioModel(undefined);
-        const data: Ministerio[] | undefined = await this.ministerioModel.getAll();
-        res.render('ministerioView', { ministerios: data });
+        this.ministerioView = new MinisterioView(req, res);
+        const ministerioOptions: MinisterioOptions = { ministerios: await this.ministerioModel.getAll() };
+        this.ministerioView.render(ministerioOptions);
     };
 
-    public store = (req: Request, res: Response) => {
+    public store = async (req: Request, res: Response) => {
         const { nombre } = req.body;
         const ministerio: Ministerio = { nombre };
         this.ministerioModel = new MinisterioModel(ministerio);
-        this.ministerioModel.store();
-        res.json({ status: 'Ministerio creado' });
+        this.ministerioView = new MinisterioView(req, res);
+        await this.ministerioModel.store();
+        this.ministerioView.redirect();
     };
 
-    public update = (req: Request, res: Response) => {
-        const { nombre } = req.body;
-        const { id } = req.params;
+    public update = async (req: Request, res: Response) => {
+        const { id, nombre } = req.body;
+        this.ministerioView = new MinisterioView(req, res);
         this.ministerioModel = new MinisterioModel({
             id: +id,
             nombre
         });
-        this.ministerioModel.update();
-        res.json({ status: 'Ministerio actualizado' });
+        await this.ministerioModel.update();
+        this.ministerioView.redirect();
     };
 
     public delete = async (req: Request, res: Response) => {
         this.ministerioModel = new MinisterioModel(undefined);
-        const { id } = req.params;
+        this.ministerioView = new MinisterioView(req, res);
+        const { id } = req.body;
         await this.ministerioModel.delete(+id);
-        res.json({ status: 'Ministerio eliminado' });
+        this.ministerioView.redirect();
     };
 
 }

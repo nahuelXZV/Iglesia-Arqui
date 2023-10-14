@@ -1,45 +1,56 @@
 import { Request, Response } from 'express';
 import { MiembroModel, Miembro } from '../models';
+import { MiembroOptions, MiembroView } from '../views/miembro.view';
 
 export class MiembroController {
 
     private miembroModel?: MiembroModel;
+    private miembroView?: MiembroView;
 
     public index = async (req: Request, res: Response) => {
         this.miembroModel = new MiembroModel(undefined);
-        const data: Miembro[] | undefined = await this.miembroModel.getAll();
-        console.table(data);
-        res.render('miembroView', { miembros: data });
+        this.miembroView = new MiembroView(req, res);
+        const miembroOption: MiembroOptions = {
+            miembros: await this.miembroModel.getAll()
+        }
+        this.miembroView.render(miembroOption);
     };
 
-    public store = (req: Request, res: Response) => {
-        const { nombre, telefono, correo, fecha_nacimiento, direccion } = req.body;
-        const miembro: Miembro = { nombre, telefono, correo, fecha_nacimiento, direccion };
-        this.miembroModel = new MiembroModel(miembro);
-        this.miembroModel.store();
-        res.json({ status: 'Miembro creado' });
+    public store = async (req: Request, res: Response) => {
+        console.table(req.body);
+        const { nombre, telefono, correo, fecha_nacimiento, direccion, miembro_id_invitador } = req.body;
+        const miembro: Miembro = { nombre, telefono, correo, fecha_nacimiento, direccion, miembro_id_invitador };
+        const relaciones = JSON.parse(req.body.relaciones);
+        this.miembroModel = new MiembroModel({ ...miembro, relaciones });
+        this.miembroView = new MiembroView(req, res);
+        await this.miembroModel.store();
+        this.miembroView.redirect();
     };
 
-    public update = (req: Request, res: Response) => {
-        const { nombre, telefono, correo, fecha_nacimiento, direccion } = req.body;
-        const { id } = req.params;
+    public update = async (req: Request, res: Response) => {
+        const { id, nombre, telefono, correo, fecha_nacimiento, direccion, miembro_id_invitador } = req.body;
+        const relaciones = JSON.parse(req.body.relaciones);
+        this.miembroView = new MiembroView(req, res);
         this.miembroModel = new MiembroModel({
             id: +id,
             nombre,
             telefono,
             correo,
             fecha_nacimiento,
-            direccion
+            direccion,
+            miembro_id_invitador,
+            relaciones
         });
-        this.miembroModel.update();
-        res.json({ status: 'Miembro actualizado' });
+        await this.miembroModel.update();
+        this.miembroView.redirect();
     };
 
     public delete = async (req: Request, res: Response) => {
+        const { id } = req.body;
         this.miembroModel = new MiembroModel(undefined);
-        const { id } = req.params;
+        this.miembroView = new MiembroView(req, res);
         await this.miembroModel.delete(+id);
-        res.json({ status: 'Miembro eliminado' });
+        this.miembroView.redirect();
     };
 
 }

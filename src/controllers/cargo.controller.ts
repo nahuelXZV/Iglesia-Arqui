@@ -1,45 +1,52 @@
 import { Request, Response } from 'express';
 import { CargoModel, Cargo, MinisterioModel, Ministerio } from '../models';
+import { CargoView } from '../views';
 
 export class CargoController {
 
     private cargoModel?: CargoModel;
     private ministerioModel?: MinisterioModel;
+    private cargoView?: CargoView;
 
     public index = async (req: Request, res: Response) => {
         this.cargoModel = new CargoModel(undefined);
         this.ministerioModel = new MinisterioModel(undefined);
-        const data: Cargo[] | undefined = await this.cargoModel.getAll();
-        const ministerios: Ministerio[] | undefined = await this.ministerioModel.getAll();
-        res.render('cargoView', { cargos: data, ministerios });
+        this.cargoView = new CargoView(req, res);
+        const cargoOptions = {
+            cargos: await this.cargoModel.getAll(),
+            ministerios: await this.ministerioModel.getAll()
+        };
+        this.cargoView.render(cargoOptions);
     };
 
-    public store = (req: Request, res: Response) => {
+    public store = async (req: Request, res: Response) => {
         const { nombre, descripcion, ministerio_id } = req.body;
         const cargo: Cargo = { nombre, descripcion, ministerio_id };
+        this.cargoView = new CargoView(req, res);
         this.cargoModel = new CargoModel(cargo);
-        this.cargoModel.store();
-        res.json({ status: 'Cargo creado' });
+        await this.cargoModel.store();
+        this.cargoView.redirect();
     };
 
-    public update = (req: Request, res: Response) => {
-        const { nombre, descripcion, ministerio_id } = req.body;
-        const { id } = req.params;
+    public update = async (req: Request, res: Response) => {
+        const { id, nombre, descripcion, ministerio_id } = req.body;
+        this.cargoView = new CargoView(req, res);
         this.cargoModel = new CargoModel({
             id: +id,
             nombre,
             descripcion,
             ministerio_id
         });
-        this.cargoModel.update();
-        res.json({ status: 'Cargo actualizado' });
+        await this.cargoModel.update();
+        this.cargoView.redirect();
     };
 
     public delete = async (req: Request, res: Response) => {
+        const { id } = req.body;
+        this.cargoView = new CargoView(req, res);
         this.cargoModel = new CargoModel(undefined);
-        const { id } = req.params;
         await this.cargoModel.delete(+id);
-        res.json({ status: 'Cargo eliminado' });
+        this.cargoView.redirect();
     };
 
 }

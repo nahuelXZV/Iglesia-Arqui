@@ -20,8 +20,8 @@ export class MinisterioModel {
     }
 
     public async getAll(): Promise<Ministerio[] | undefined> {
-        const client = await this.dbConexion.connect();
         try {
+            const client = await this.dbConexion.connect();
             const result = await client.query('SELECT * FROM ministerio');
             return await this.formatearDatos(result);
         } catch (error) {
@@ -32,8 +32,8 @@ export class MinisterioModel {
     }
 
     public async getOne(id: number): Promise<Ministerio | undefined> {
-        const client = await this.dbConexion.connect();
         try {
+            const client = await this.dbConexion.connect();
             const result = await client.query('SELECT * FROM ministerio WHERE id = $1', [id]);
             return await this.formatearDato(result);
         } catch (error) {
@@ -44,8 +44,8 @@ export class MinisterioModel {
     }
 
     public async store() {
-        const client = await this.dbConexion.connect();
         try {
+            const client = await this.dbConexion.connect();
             const id = await client.query('SELECT MAX(id) FROM ministerio');
             this.id = id.rows[0].max + 1;
             const result = await client.query('INSERT INTO ministerio(id, nombre) VALUES($1,$2)', [this.id, this.nombre]);
@@ -58,8 +58,8 @@ export class MinisterioModel {
     }
 
     public async update() {
-        const client = await this.dbConexion.connect();
         try {
+            const client = await this.dbConexion.connect();
             const result = await client.query('UPDATE ministerio SET nombre = $1 WHERE id = $2', [this.nombre, this.id]);
             return result;
         } catch (error) {
@@ -70,8 +70,8 @@ export class MinisterioModel {
     }
 
     public async delete(id: number) {
-        const client = await this.dbConexion.connect();
         try {
+            const client = await this.dbConexion.connect();
             const result = await client.query('DELETE FROM ministerio WHERE id = $1', [id]);
             return result;
         } catch (error) {

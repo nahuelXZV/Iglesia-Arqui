@@ -12,7 +12,7 @@
 <body class="bg-gray-100">
     <nav class="bg-white border-gray-200  mb-5">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="https://flowbite.com/" class="flex items-center">
+            <a href="/" class="flex items-center">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap  uppercase">Iglesia</span>
             </a>
             <div class="hidden w-full md:block md:w-auto" id="navbar-default">
@@ -126,7 +126,7 @@
                 <div class="mb-4">
                     <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
                         Miembro</label>
-                    <select id="miembro_id_relacion" name="miembro_id_relacion"
+                    <select id="miembro_id_relacionado" name="miembro_id_relacionado"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                         <option selected>Escoge un miembro </option>
                         <% if (miembros) { %>
@@ -181,26 +181,6 @@
                             </tr>
                         </thead>
                         <tbody class="familia-body" id="familia-body" name="familia-body">
-                            <!-- <% if (miembros) { %>
-                                <% miembros.forEach((dato)=> { %>
-                                    <tr class="bg-white border border-1 ">
-                                        <td class="px-6 py-4">
-                                            <%= dato.id %>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <%= dato.nombre %>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-blue-400 hover:text-blue-600"
-                                                onclick="eliminarDatos(event)" data-id="<%= dato.id %>">
-                                                Eliminar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <% }); %>
-                                        <% } else { %>
-                                            <p>No hay datos disponibles.</p>
-                                            <% } %> -->
                         </tbody>
                     </table>
                 </div>
@@ -269,7 +249,9 @@
                                         data-id="<%= dato.id %>" data-nombre="<%= dato.nombre %>"
                                         data-telefono="<%= dato.telefono %>" data-correo="<%= dato.correo %> "
                                         data-direccion="<%= dato.direccion %>"
-                                        data-fecha_nacimiento="<%= dato.fecha_nacimiento %> ">
+                                        data-fecha_nacimiento="<%= dato.fecha_nacimiento %>"
+                                        data-miembro_id_invitador="<%= dato.miembro_id_invitador %>"
+                                        data-relaciones="<%= JSON.stringify(dato.relaciones) %>">
                                         Actualizar
                                     </button>
                                     <button class="text-blue-400 hover:text-blue-600" onclick="eliminarDatos(event)"
@@ -285,7 +267,9 @@
                 </tbody>
             </table>
         </div>
-
+        <form action="" id="delete" class="hidden" method="GET">
+            <input type="hidden" name="_method" value="DELETE" />
+        </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <script>
@@ -294,15 +278,14 @@
 
         function addRelation() {
             let tipo_relacion = document.getElementById('tipo_relacion').value;
-            let miembro_id_relacion = document.getElementById('miembro_id_relacion').value;
-            let miembro = document.getElementById('miembro_id_relacion').options[document.getElementById('miembro_id_relacion').selectedIndex].text;
+            let miembro_id_relacionado = document.getElementById('miembro_id_relacionado').value;
+            let miembro = document.getElementById('miembro_id_relacionado').options[document.getElementById('miembro_id_relacionado').selectedIndex].text;
             let relacion = {
                 tipo_relacion: tipo_relacion,
-                miembro_id_relacion: miembro_id_relacion,
+                miembro_id_relacionado: miembro_id_relacionado,
                 miembro: miembro
             }
             familia.push(relacion);
-            console.table(familia);
             renderFamilia();
         }
 
@@ -319,7 +302,7 @@
                     </td>
                     <td class="px-6 py-4">
                         <button class="text-blue-400 hover:text-blue-600" onclick="eliminarRelacion(event)"
-                            data-id="${dato.miembro_id_relacion}">
+                            data-id="${dato.miembro_id_relacionado}">
                             Eliminar
                         </button>
                     </td>
@@ -332,7 +315,7 @@
         function eliminarRelacion(event) {
             const id = event.currentTarget.getAttribute('data-id');
             console.log('Eliminar el dato con el id:', id);
-            familia = familia.filter((dato) => dato.miembro_id_relacion != id);
+            familia = familia.filter((dato) => dato.miembro_id_relacionado != id);
             renderFamilia();
         }
 
@@ -343,39 +326,35 @@
         function enviarDatos(event) {
             event.preventDefault();
             const formulario = document.getElementById('formulario');
+            const familiaInput = document.createElement('input');
+            familiaInput.type = 'hidden';
+            familiaInput.name = 'relaciones';
+            familiaInput.value = JSON.stringify(familia);
+            formulario.appendChild(familiaInput);
             const formData = new FormData(formulario);
             const datos = {};
             formData.forEach((valor, clave) => { datos[clave] = valor; });
-            const metodo = datos.id ? 'PUT' : 'POST';
-            const message = datos.id ? 'actualizado' : 'creado';
-            const endPoint = datos.id ? `/miembros/${datos.id}` : '/miembros';
-            fetch(endPoint, {
-                method: metodo,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datos)
-            }).then(data => {
-                alert('Miembro ' + message + ' correctamente');
-                reload();
-            }).catch(err => console.log(err));
+            const metodo = 'POST';
+            const endPoint = datos.id ? `/miembros/update` : '/miembros/create';
+            console.table(datos);
+            formulario.method = metodo;
+            formulario.action = endPoint;
+            formulario.submit();
         }
         const formulario = document.getElementById('formulario');
         formulario.addEventListener('submit', enviarDatos);
 
         function eliminarDatos(event) {
             const id = event.currentTarget.getAttribute('data-id');
-            console.log('Eliminar el dato con el id:', id);
-            fetch(`/miembros/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    alert('Mimebro eliminado correctamente');
-                    reload();
-                })
-                .catch(err => console.log(err));
+            const deleteForm = document.getElementById('delete');
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = id;
+            deleteForm.appendChild(idInput);
+            deleteForm.method = 'POST';
+            deleteForm.action = `/miembros/delete`;
+            deleteForm.submit();
         }
 
         function ponerDatosForm(event) {
@@ -385,6 +364,8 @@
             const correo = event.currentTarget.getAttribute('data-correo');
             const direccion = event.currentTarget.getAttribute('data-direccion');
             const fecha_nacimiento = event.currentTarget.getAttribute('data-fecha_nacimiento');
+            const miembro_id_invitador = event.currentTarget.getAttribute('data-miembro_id_invitador');
+            const relaciones = event.currentTarget.getAttribute('data-relaciones');
 
             const formulario = document.getElementById('formulario');
             const idCard = document.getElementById('id-card');
@@ -401,8 +382,14 @@
             telefonoInput.value = telefono;
             correoInput.value = correo;
             direccionInput.value = direccion;
-            const fecha = fecha_nacimiento.split('-').join('/');
-            fecha_nacimientoInput.setAttribute('value', fecha);
+            fecha_nacimientoInput.setAttribute('value', fecha_nacimiento);
+            if (miembro_id_invitador) {
+                document.getElementById('miembro_id_invitador').value = miembro_id_invitador;
+            }
+            if (relaciones) {
+                familia = JSON.parse(relaciones);
+                renderFamilia();
+            }
             idCard.style.display = 'block';
         }
 

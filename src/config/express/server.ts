@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import methodOverride from 'method-override';
 import path from 'path';
 import ejs from 'ejs';
 
@@ -25,9 +26,10 @@ export class Server {
         //* Middlewares
         this.app.use(express.json()); // raw
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(methodOverride('_method'));
 
         //* View Engine
-        this.app.set('views', path.join(__dirname, '../../views'));
+        this.app.set('views', path.join(__dirname, '../../resources'));
         this.app.set('view engine', 'ejs');
 
 

@@ -24,13 +24,10 @@ const dbConfig: dbConfig = {
 
 export class db implements DBConection {
 
-    public client: Client;
-
-    constructor() {
-        this.client = new Client(dbConfig);
-    }
+    public client?: Client;
 
     public async connect(): Promise<Client> {
+        this.client = new Client(dbConfig);
         try {
             await this.client.connect();
         } catch (error) {
@@ -40,6 +37,6 @@ export class db implements DBConection {
     }
 
     public async disconnect(): Promise<void> {
-        await this.client.end();
+        await this.client?.end();
     }
 }

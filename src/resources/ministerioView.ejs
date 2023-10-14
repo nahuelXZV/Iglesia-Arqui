@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
 <body class="bg-gray-100">
     <nav class="bg-white border-gray-200  mb-5">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="https://flowbite.com/" class="flex items-center">
+            <a href="/" class="flex items-center">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap  uppercase">Iglesia</span>
             </a>
             <div class="hidden w-full md:block md:w-auto" id="navbar-default">
@@ -120,9 +120,10 @@
                                     <% } %>
                 </tbody>
             </table>
-
         </div>
-
+        <form action="" id="delete" class="hidden" method="GET">
+            <input type="hidden" name="_method" value="DELETE" />
+        </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <script>
@@ -136,45 +137,38 @@
             const formData = new FormData(formulario);
             const datos = {};
             formData.forEach((valor, clave) => { datos[clave] = valor; });
-            const metodo = datos.id ? 'PUT' : 'POST';
-            const message = datos.id ? 'actualizado' : 'creado';
-            const endPoint = datos.id ? `/ministerio/${datos.id}` : '/ministerio';
-            fetch(endPoint, {
-                method: metodo,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datos)
-            }).then(data => {
-                alert('Ministerio ' + message + ' correctamente');
-                reload();
-            }).catch(err => console.log(err));
+            const metodo = 'POST'
+            const endPoint = datos.id ? `/ministerio/update` : '/ministerio/create';
+            formulario.method = metodo;
+            formulario.action = endPoint;
+            formulario.submit();
         }
         const formulario = document.getElementById('formulario');
         formulario.addEventListener('submit', enviarDatos);
 
         function eliminarDatos(event) {
             const id = event.currentTarget.getAttribute('data-id');
-            console.log('Eliminar el dato con el id:', id);
-            fetch(`/ministerio/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    alert('Ministerio eliminado correctamente');
-                    reload();
-                })
-                .catch(err => console.log(err));
+            const deleteForm = document.getElementById('delete');
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = id;
+            deleteForm.appendChild(idInput);
+            deleteForm.method = 'POST';
+            deleteForm.action = `/ministerio/delete`;
+            deleteForm.submit();
         }
 
         function ponerDatosForm(event) {
             const id = event.currentTarget.getAttribute('data-id');
             const nombre = event.currentTarget.getAttribute('data-nombre');
+
+            const idCard = document.getElementById('id-card');
             const formulario = document.getElementById('formulario');
+
             const nombreInput = document.getElementById('nombre');
             const idInput = document.getElementById('id');
-            const idCard = document.getElementById('id-card');
+
             nombreInput.value = nombre;
             idInput.value = id;
             idCard.style.display = 'block';
