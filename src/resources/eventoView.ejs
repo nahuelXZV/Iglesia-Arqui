@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
-    <title>Miembros</title>
+    <title>Eventos</title>
 </head>
 
 <body class="bg-gray-100">
@@ -32,12 +32,12 @@
                     </li>
                     <li>
                         <a href="/miembros"
-                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
                             Miembros </a>
                     </li>
                     <li>
                         <a href="/eventos"
-                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
+                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
                             Eventos
                         </a>
                     </li>
@@ -48,7 +48,7 @@
 
     <!-- titulo que diga ministerios -->
     <div class="flex justify-center mb-5">
-        <h1 class="text-3xl font-bold">Miembros</h1>
+        <h1 class="text-3xl font-bold">Eventos</h1>
     </div>
 
     <div class="grid grid-cols-2 px-10 pt-2">
@@ -70,98 +70,54 @@
                 </div>
 
                 <div class="mb-2">
-                    <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Telefono</label>
-                    <input type="text" id="telefono" name="telefono"
+                    <label for="fecha" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Fecha</label>
+                    <input type="date" id="fecha" name="fecha"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="Telefono..." required>
+                        required>
                 </div>
 
                 <div class="mb-2">
-                    <label for="correo" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Correo</label>
-                    <input type="text" id="correo" name="correo"
+                    <label for="hora" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Hora</label>
+                    <input type="time" id="hora" name="hora"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="Correo..." required>
+                        required>
                 </div>
 
-                <div class="mb-2">
-                    <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Direccion</label>
-                    <input type="text" id="direccion" name="direccion"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="Direccion..." required>
-                </div>
-
-                <div class="mb-2">
-                    <label for="fecha_nacimiento" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Fecha Nacimiento</label>
-                    <input type="Date" id="fecha_nacimiento" name="fecha_nacimiento"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="Direccion..." required>
-                </div>
-
-                <div class="mb-4">
-                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Invitado por</label>
-                    <select id="invitado_por" name="invitado_por"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                        <option selected>Escoge un miembro </option>
-                        <% if (miembros) { %>
-                            <% miembros.forEach((miembro)=> { %>
-                                <option value="<%= miembro.id %>">
-                                    <%= miembro.nombre %>
-                                </option>
-                                <% }); %>
-                                    <% } else { %>
-                                        <p>No hay datos disponibles.</p>
-                                        <% } %>
-                    </select>
+                <div class="mb-4 col-span-2">
+                    <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Descripcion</label>
+                    <textarea name="descripcion" id="descripcion" cols="30" rows="5" placeholder="Descripcion..."
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "></textarea>
                 </div>
                 <!-- titulo de familia -->
                 <div class="flex justify-center mb-1 col-span-2">
-                    <h1 class="text-xl font-bold">Familia</h1>
+                    <h1 class="text-xl font-bold">Participantes</h1>
                 </div>
-
-                <div class="mb-4">
-                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Miembro</label>
-                    <select id="miembro_id_relacionado" name="miembro_id_relacionado"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                        <option selected>Escoge un miembro </option>
-                        <% if (miembros) { %>
-                            <% miembros.forEach((miembro)=> { %>
-                                <option value="<%= miembro.id %>">
-                                    <%= miembro.nombre %>
-                                </option>
-                                <% }); %>
-                                    <% } else { %>
-                                        <p>No hay datos disponibles.</p>
-                                        <% } %>
-                    </select>
-                </div>
-                <div class="grid grid-cols-3">
+                <div class="col-span-2 grid grid-cols-3">
                     <div class="col-span-2">
-                        <label for="countries" class=" block mb-2 text-sm font-medium text-gray-900 ">
-                            Tipo de relacion</label>
-                        <select id="tipo_relacion" name="tipo_relacion"
+                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
+                            Miembro</label>
+                        <select id="participante" name="participante"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                            <option selected>Escoge una relacion</option>
-                            <option value="Padre">Padre</option>
-                            <option value="Madre">Madre</option>
-                            <option value="Hermano">Hermano</option>
-                            <option value="Hermana">Hermana</option>
-                            <option value="Abuela">Abuela</option>
-                            <option value="Abuelo">Abuelo</option>
-                            <option value="Tio">Tio</option>
-                            <option value="Tia">Tia</option>
+                            <option selected>Escoge un miembro </option>
+                            <% if (miembros) { %>
+                                <% miembros.forEach((miembro)=> { %>
+                                    <option value="<%= miembro.id %>">
+                                        <%= miembro.nombre %>
+                                    </option>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <p>No hay datos disponibles.</p>
+                                            <% } %>
                         </select>
                     </div>
-                    <!-- boton de add -->
-                    <div class="flex items-center justify-center mb-1 ">
+                    <div class="flex items-end justify-center mb-1 ">
+                        <br>
                         <button type="button"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
-                            onclick="addRelation()">Añadir</button>
+                            onclick="addParticipante()">Añadir</button>
                     </div>
                 </div>
 
@@ -170,10 +126,7 @@
                         <thead class="text-xs text-gray-800 uppercase bg-gray-200">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Relacion
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Miembro
+                                    Nombre
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Acciones
@@ -203,19 +156,13 @@
                             Nombre
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Telefono
+                            Descripcion
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Correo
+                            Fecha
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Direccion
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Fecha Nacimiento
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Invitado Por
+                            Hora
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Acciones
@@ -223,40 +170,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% if (miembros) { %>
-                        <% miembros.forEach((dato)=> { %>
+                    <% if (eventos) { %>
+                        <% eventos.forEach((dato)=> { %>
                             <tr class="bg-white border border-1 ">
 
                                 <td class="px-6 py-4">
                                     <%= dato.nombre %>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <%= dato.telefono%>
+                                    <%= dato.descripcion%>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <%= dato.correo %>
+                                    <%= dato.fecha %>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <%= dato.direccion %>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <%= dato.fecha_nacimiento %>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <% miembros.forEach((miembro)=> { %>
-                                        <% if (miembro.id==dato.invitado_por) { %>
-                                            <%= miembro.nombre %>
-                                                <% } %>
-                                                    <% }); %>
+                                    <%= dato.hora %>
                                 </td>
                                 <td class="px-6 py-4">
                                     <button class="text-blue-400 hover:text-blue-600" onclick="ponerDatosForm(event)"
                                         data-id="<%= dato.id %>" data-nombre="<%= dato.nombre %>"
-                                        data-telefono="<%= dato.telefono %>" data-correo="<%= dato.correo %> "
-                                        data-direccion="<%= dato.direccion %>"
-                                        data-fecha_nacimiento="<%= dato.fecha_nacimiento %>"
-                                        data-invitado_por="<%= dato.invitado_por %>"
-                                        data-relaciones="<%= JSON.stringify(dato.relaciones) %>">
+                                        data-descripcion="<%= dato.descripcion %>" data-fecha="<%= dato.fecha %> "
+                                        data-hora="<%= dato.hora %>"
+                                        data-arrayParticipantes="<%= JSON.stringify(dato.participantes) %>">
                                         Ver
                                     </button>
                                     <button class="text-blue-400 hover:text-blue-600" onclick="eliminarDatos(event)"
@@ -279,35 +214,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <script>
         // declarar una variable global
-        let familia = [];
+        let participantes = [];
 
-        function addRelation() {
-            let tipo_relacion = document.getElementById('tipo_relacion').value;
-            let miembro_id_relacionado = document.getElementById('miembro_id_relacionado').value;
-            let miembro = document.getElementById('miembro_id_relacionado').options[document.getElementById('miembro_id_relacionado').selectedIndex].text;
-            let relacion = {
-                tipo_relacion: tipo_relacion,
-                miembro_id_relacionado: miembro_id_relacionado,
+        function addParticipante() {
+            let participante = document.getElementById('participante').value;
+            let miembro = document.getElementById('participante').options[document.getElementById('participante').selectedIndex].text;
+            let participacion = {
+                participante: participante,
                 miembro: miembro
             }
-            familia.push(relacion);
-            renderFamilia();
+            participantes.push(participacion);
+            renderParticipantes();
         }
 
-        function renderFamilia() {
+        function renderParticipantes() {
             let html = '';
-            familia.forEach((dato) => {
+            participantes.forEach((dato) => {
                 html += `
                 <tr class="bg-white border border-1 ">
-                    <td class="px-6 py-4">
-                        ${dato.tipo_relacion}
-                    </td>
                     <td class="px-6 py-4">
                         ${dato.miembro}
                     </td>
                     <td class="px-6 py-4">
-                        <button class="text-blue-400 hover:text-blue-600" onclick="eliminarRelacion(event)"
-                            data-id="${dato.miembro_id_relacionado}">
+                        <button class="text-blue-400 hover:text-blue-600" onclick="eliminarParticipante(event)"
+                            data-id="${dato.participante}">
                             Eliminar
                         </button>
                     </td>
@@ -317,31 +247,27 @@
             document.getElementById('familia-body').innerHTML = html;
         }
 
-        function eliminarRelacion(event) {
+        function eliminarParticipante(event) {
             const id = event.currentTarget.getAttribute('data-id');
             console.log('Eliminar el dato con el id:', id);
-            familia = familia.filter((dato) => dato.miembro_id_relacionado != id);
-            renderFamilia();
+            participantes = participantes.filter((dato) => dato.participante != id);
+            renderParticipantes();
         }
 
-        function reload() {
-            location.reload();
-        }
 
         function enviarDatos(event) {
             event.preventDefault();
             const formulario = document.getElementById('formulario');
-            const familiaInput = document.createElement('input');
-            familiaInput.type = 'hidden';
-            familiaInput.name = 'relaciones';
-            familiaInput.value = JSON.stringify(familia);
-            formulario.appendChild(familiaInput);
+            const participantesInput = document.createElement('input');
+            participantesInput.type = 'hidden';
+            participantesInput.name = 'participantes';
+            participantesInput.value = JSON.stringify(participantes);
+            formulario.appendChild(participantesInput);
             const formData = new FormData(formulario);
             const datos = {};
             formData.forEach((valor, clave) => { datos[clave] = valor; });
             const metodo = 'POST';
-            const endPoint = datos.id ? `/miembros/update` : '/miembros/create';
-            console.table(datos);
+            const endPoint = datos.id ? `/eventos/update` : '/eventos/create';
             formulario.method = metodo;
             formulario.action = endPoint;
             formulario.submit();
@@ -358,43 +284,44 @@
             idInput.value = id;
             deleteForm.appendChild(idInput);
             deleteForm.method = 'POST';
-            deleteForm.action = `/miembros/delete`;
+            deleteForm.action = `/eventos/delete`;
             deleteForm.submit();
         }
 
         function ponerDatosForm(event) {
             const id = event.currentTarget.getAttribute('data-id');
             const nombre = event.currentTarget.getAttribute('data-nombre');
-            const telefono = event.currentTarget.getAttribute('data-telefono');
-            const correo = event.currentTarget.getAttribute('data-correo');
-            const direccion = event.currentTarget.getAttribute('data-direccion');
-            const fecha_nacimiento = event.currentTarget.getAttribute('data-fecha_nacimiento');
-            const invitado_por = event.currentTarget.getAttribute('data-invitado_por');
-            const relaciones = event.currentTarget.getAttribute('data-relaciones');
+            const descripcion = event.currentTarget.getAttribute('data-descripcion');
+            const fecha = event.currentTarget.getAttribute('data-fecha');
+            const hora = event.currentTarget.getAttribute('data-hora');
+            const arrayParticipantes = event.currentTarget.getAttribute('data-arrayParticipantes');
 
             const formulario = document.getElementById('formulario');
             const idCard = document.getElementById('id-card');
 
             const nombreInput = document.getElementById('nombre');
             const idInput = document.getElementById('id');
-            const telefonoInput = document.getElementById('telefono');
-            const correoInput = document.getElementById('correo');
-            const direccionInput = document.getElementById('direccion');
-            const fecha_nacimientoInput = document.getElementById('fecha_nacimiento');
-            const invitado_porInput = document.getElementById('invitado_por');
+            const descripcionInput = document.getElementById('descripcion');
+            const fechaInput = document.getElementById('fecha');
+            const horaInput = document.getElementById('hora');
 
             nombreInput.value = nombre;
             idInput.value = id;
-            telefonoInput.value = telefono;
-            correoInput.value = correo;
-            direccionInput.value = direccion;
-            fecha_nacimientoInput.setAttribute('value', fecha_nacimiento);
-            if (invitado_por) {
-                document.getElementById('invitado_por').value = invitado_por;
-            }
-            if (relaciones) {
-                familia = JSON.parse(relaciones);
-                renderFamilia();
+            descripcionInput.value = descripcion;
+            fechaInput.setAttribute('value', new Date(fecha).toISOString().split('T')[0]);
+            horaInput.value = hora;
+            if (arrayParticipantes) {
+                participantes = [];
+                jsonParticipantes = JSON.parse(arrayParticipantes);
+                jsonParticipantes.forEach((dato) => {
+                    let participacion = {
+                        participante: dato.miembro_id,
+                        miembro: dato.miembro_nombre
+                    }
+                    participantes.push(participacion);
+                });
+                console.table(participantes);
+                renderParticipantes();
             }
             idCard.style.display = 'block';
         }
@@ -402,25 +329,21 @@
         function limpiarForm() {
             const nombreInput = document.getElementById('nombre');
             const idInput = document.getElementById('id');
-            const telefonoInput = document.getElementById('telefono');
-            const correoInput = document.getElementById('correo');
-            const direccionInput = document.getElementById('direccion');
-            const fecha_nacimientoInput = document.getElementById('fecha_nacimiento');
-            const invitado_porInput = document.getElementById('invitado_por');
+            const descripcionInput = document.getElementById('descripcion');
+            const fechaInput = document.getElementById('fecha');
+            const horaInput = document.getElementById('hora');
 
             const idCard = document.getElementById('id-card');
 
             nombreInput.value = '';
             idInput.value = '';
-            telefonoInput.value = '';
-            correoInput.value = '';
-            direccionInput.value = '';
-            fecha_nacimientoInput.value = '';
-            invitado_porInput.value = '';
+            descripcionInput.value = '';
+            fechaInput.value = '';
+            horaInput.value = '';
             idCard.style.display = 'none';
 
-            familia = [];
-            renderFamilia();
+            participantes = [];
+            renderParticipantes();
         }
 
     </script>

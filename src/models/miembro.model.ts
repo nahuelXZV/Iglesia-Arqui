@@ -140,7 +140,7 @@ export class MiembroModel {
     public async delete(id: number) {
         const client = await this.dbConexion.connect();
         try {
-            const result = await client.query('DELETE FROM mimebro WHERE id = $1', [id]);
+            const result = await client.query('DELETE FROM miembro WHERE id = $1', [id]);
             return result;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);

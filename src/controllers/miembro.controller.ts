@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { MiembroModel, Miembro } from '../models';
-import { MiembroOptions, MiembroView } from '../views/miembro.view';
+import { MiembroOptions, MiembroView } from '../views/';
 
 export class MiembroController {
 
