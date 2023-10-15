@@ -17,9 +17,8 @@ export class MiembroController {
     };
 
     public store = async (req: Request, res: Response) => {
-        console.table(req.body);
-        const { nombre, telefono, correo, fecha_nacimiento, direccion, miembro_id_invitador } = req.body;
-        const miembro: Miembro = { nombre, telefono, correo, fecha_nacimiento, direccion, miembro_id_invitador };
+        const { nombre, telefono, correo, fecha_nacimiento, direccion, invitado_por } = req.body;
+        const miembro: Miembro = { nombre, telefono, correo, fecha_nacimiento, direccion, invitado_por };
         const relaciones = JSON.parse(req.body.relaciones);
         this.miembroModel = new MiembroModel({ ...miembro, relaciones });
         this.miembroView = new MiembroView(req, res);
@@ -28,7 +27,7 @@ export class MiembroController {
     };
 
     public update = async (req: Request, res: Response) => {
-        const { id, nombre, telefono, correo, fecha_nacimiento, direccion, miembro_id_invitador } = req.body;
+        const { id, nombre, telefono, correo, fecha_nacimiento, direccion, invitado_por } = req.body;
         const relaciones = JSON.parse(req.body.relaciones);
         this.miembroView = new MiembroView(req, res);
         this.miembroModel = new MiembroModel({
@@ -38,7 +37,7 @@ export class MiembroController {
             correo,
             fecha_nacimiento,
             direccion,
-            miembro_id_invitador,
+            invitado_por,
             relaciones
         });
         await this.miembroModel.update();

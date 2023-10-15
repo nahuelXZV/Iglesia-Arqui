@@ -15,8 +15,9 @@ export interface Miembro {
     correo: string;
     direccion: string;
     fecha_nacimiento: string;
-    miembro_id_invitador?: number;
+    invitado_por?: number;
     relaciones?: RelacionRequest[];
+    nombre_invitado_por?: string;
 }
 
 export class MiembroModel {
@@ -29,7 +30,7 @@ export class MiembroModel {
     public correo: string;
     public direccion: string;
     public fecha_nacimiento: string;
-    public miembro_id_invitador?: number;
+    public invitado_por?: number;
     public relaciones?: RelacionRequest[];
 
     constructor(data: Miembro | undefined) {
@@ -39,7 +40,7 @@ export class MiembroModel {
         this.correo = data?.correo || "";
         this.direccion = data?.direccion || "";
         this.fecha_nacimiento = data?.fecha_nacimiento || "";
-        this.miembro_id_invitador = data?.miembro_id_invitador;
+        this.invitado_por = data?.invitado_por;
         this.relaciones = data?.relaciones;
         this.dbConexion = new db();
     }
@@ -90,13 +91,14 @@ export class MiembroModel {
         try {
             const id = await client.query('SELECT MAX(id) FROM miembro');
             this.id = id.rows[0].max + 1;
-            const result = await client.query('INSERT INTO miembro(id, nombre, telefono, correo, direccion, fecha_nacimiento) VALUES($1, $2, $3, $4, $5, $6)', [
+            const result = await client.query('INSERT INTO miembro(id, nombre, telefono, correo, direccion, fecha_nacimiento, invitado_por) VALUES($1, $2, $3, $4, $5, $6, $7)', [
                 this.id,
                 this.nombre,
                 this.telefono,
                 this.correo,
                 this.direccion,
-                this.fecha_nacimiento
+                this.fecha_nacimiento,
+                this.invitado_por
             ]);
             this.formatearRelaciones(this.relaciones || []).forEach(async (item: Relacion) => {
                 this.relacionModel = new RelacionModel(item);
@@ -113,12 +115,13 @@ export class MiembroModel {
     public async update() {
         const client = await this.dbConexion.connect();
         try {
-            const result = await client.query(' UPDATE miembro SET nombre = $1, telefono = $2, correo = $3, direccion = $4, fecha_nacimiento = $5 WHERE id = $6', [
+            const result = await client.query(' UPDATE miembro SET nombre = $1, telefono = $2, correo = $3, direccion = $4, fecha_nacimiento = $5, invitado_por = $6 WHERE id = $7', [
                 this.nombre,
                 this.telefono,
                 this.correo,
                 this.direccion,
                 this.fecha_nacimiento,
+                this.invitado_por,
                 this.id
             ]);
             await new RelacionModel(undefined).deleteByMiembro(this.id);
@@ -169,6 +172,7 @@ export class MiembroModel {
                 correo: item.correo,
                 direccion: item.direccion,
                 fecha_nacimiento: item.fecha_nacimiento.toISOString().split('T')[0],
+                invitado_por: item.invitado_por
             }
         });
     }
@@ -181,6 +185,7 @@ export class MiembroModel {
             telefono: rows[0].telefono,
             correo: rows[0].correo,
             direccion: rows[0].direccion,
+            invitado_por: rows[0].invitado_por,
             fecha_nacimiento: rows[0].fecha_nacimiento.toISOString().split('T')[0],
         }
     }

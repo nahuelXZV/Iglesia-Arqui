@@ -104,7 +104,7 @@
                 <div class="mb-4">
                     <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
                         Invitado por</label>
-                    <select id="miembro_id_invitador" name="miembro_id_invitador"
+                    <select id="invitado_por" name="invitado_por"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                         <option selected>Escoge un miembro </option>
                         <% if (miembros) { %>
@@ -161,7 +161,7 @@
                     <div class="flex items-center justify-center mb-1 ">
                         <button type="button"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
-                            onclick="addRelation()">Add</button>
+                            onclick="addRelation()">Añadir</button>
                     </div>
                 </div>
 
@@ -187,7 +187,7 @@
 
                 <div class="">
                     <button type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Submit</button>
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Guardar</button>
                     <button type="button" onclick="limpiarForm()"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">Limpiar</button>
                 </div>
@@ -199,9 +199,6 @@
             <table class="w-full text-sm text-left text-gray-500 ">
                 <thead class="text-xs text-gray-800 uppercase bg-gray-200">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            ID
-                        </th>
                         <th scope="col" class="px-6 py-3">
                             Nombre
                         </th>
@@ -218,6 +215,9 @@
                             Fecha Nacimiento
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Invitado Por
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Acciones
                         </th>
                     </tr>
@@ -226,9 +226,7 @@
                     <% if (miembros) { %>
                         <% miembros.forEach((dato)=> { %>
                             <tr class="bg-white border border-1 ">
-                                <td class="px-6 py-4">
-                                    <%= dato.id %>
-                                </td>
+
                                 <td class="px-6 py-4">
                                     <%= dato.nombre %>
                                 </td>
@@ -245,12 +243,19 @@
                                     <%= dato.fecha_nacimiento %>
                                 </td>
                                 <td class="px-6 py-4">
+                                    <% miembros.forEach((miembro)=> { %>
+                                        <% if (miembro.id==dato.invitado_por) { %>
+                                            <%= miembro.nombre %>
+                                                <% } %>
+                                                    <% }); %>
+                                </td>
+                                <td class="px-6 py-4">
                                     <button class="text-blue-400 hover:text-blue-600" onclick="ponerDatosForm(event)"
                                         data-id="<%= dato.id %>" data-nombre="<%= dato.nombre %>"
                                         data-telefono="<%= dato.telefono %>" data-correo="<%= dato.correo %> "
                                         data-direccion="<%= dato.direccion %>"
                                         data-fecha_nacimiento="<%= dato.fecha_nacimiento %>"
-                                        data-miembro_id_invitador="<%= dato.miembro_id_invitador %>"
+                                        data-invitado_por="<%= dato.invitado_por %>"
                                         data-relaciones="<%= JSON.stringify(dato.relaciones) %>">
                                         Actualizar
                                     </button>
@@ -364,7 +369,7 @@
             const correo = event.currentTarget.getAttribute('data-correo');
             const direccion = event.currentTarget.getAttribute('data-direccion');
             const fecha_nacimiento = event.currentTarget.getAttribute('data-fecha_nacimiento');
-            const miembro_id_invitador = event.currentTarget.getAttribute('data-miembro_id_invitador');
+            const invitado_por = event.currentTarget.getAttribute('data-invitado_por');
             const relaciones = event.currentTarget.getAttribute('data-relaciones');
 
             const formulario = document.getElementById('formulario');
@@ -376,6 +381,7 @@
             const correoInput = document.getElementById('correo');
             const direccionInput = document.getElementById('direccion');
             const fecha_nacimientoInput = document.getElementById('fecha_nacimiento');
+            const invitado_porInput = document.getElementById('invitado_por');
 
             nombreInput.value = nombre;
             idInput.value = id;
@@ -383,8 +389,8 @@
             correoInput.value = correo;
             direccionInput.value = direccion;
             fecha_nacimientoInput.setAttribute('value', fecha_nacimiento);
-            if (miembro_id_invitador) {
-                document.getElementById('miembro_id_invitador').value = miembro_id_invitador;
+            if (invitado_por) {
+                document.getElementById('invitado_por').value = invitado_por;
             }
             if (relaciones) {
                 familia = JSON.parse(relaciones);
@@ -400,6 +406,7 @@
             const correoInput = document.getElementById('correo');
             const direccionInput = document.getElementById('direccion');
             const fecha_nacimientoInput = document.getElementById('fecha_nacimiento');
+            const invitado_porInput = document.getElementById('invitado_por');
 
             const idCard = document.getElementById('id-card');
 
@@ -409,6 +416,7 @@
             correoInput.value = '';
             direccionInput.value = '';
             fecha_nacimientoInput.value = '';
+            invitado_porInput.value = '';
             idCard.style.display = 'none';
 
             familia = [];

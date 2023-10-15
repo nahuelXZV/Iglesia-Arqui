@@ -24,7 +24,7 @@ const dbConfig: dbConfig = {
 
 export class db implements DBConection {
 
-    public client?: Client;
+    private client?: Client;
 
     public async connect(): Promise<Client> {
         this.client = new Client(dbConfig);

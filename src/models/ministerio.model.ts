@@ -9,8 +9,8 @@ export interface Ministerio {
 export class MinisterioModel {
 
     private dbConexion: DBConection;
-    public id: number;
-    public nombre: string;
+    private id: number;
+    private nombre: string;
 
     constructor(data: Ministerio | undefined) {
         const { nombre = "", id } = data || {};
