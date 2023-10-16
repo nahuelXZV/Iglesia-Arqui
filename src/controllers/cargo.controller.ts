@@ -24,13 +24,19 @@ export class CargoController {
         const cargo: Cargo = { nombre, descripcion, ministerio_id };
         this.cargoView = new CargoView(req, res);
         this.cargoModel = new CargoModel(cargo);
+        this.ministerioModel = new MinisterioModel(undefined);
         await this.cargoModel.store();
-        this.cargoView.redirect();
+        const cargoOptions = {
+            cargos: await this.cargoModel.getAll(),
+            ministerios: await this.ministerioModel.getAll()
+        };
+        this.cargoView.render(cargoOptions);
     };
 
     public update = async (req: Request, res: Response) => {
         const { id, nombre, descripcion, ministerio_id } = req.body;
         this.cargoView = new CargoView(req, res);
+        this.ministerioModel = new MinisterioModel(undefined);
         this.cargoModel = new CargoModel({
             id: +id,
             nombre,
@@ -38,15 +44,24 @@ export class CargoController {
             ministerio_id
         });
         await this.cargoModel.update();
-        this.cargoView.redirect();
+        const cargoOptions = {
+            cargos: await this.cargoModel.getAll(),
+            ministerios: await this.ministerioModel.getAll()
+        };
+        this.cargoView.render(cargoOptions);
     };
 
     public delete = async (req: Request, res: Response) => {
         const { id } = req.body;
         this.cargoView = new CargoView(req, res);
+        this.ministerioModel = new MinisterioModel(undefined);
         this.cargoModel = new CargoModel(undefined);
         await this.cargoModel.delete(+id);
-        this.cargoView.redirect();
+        const cargoOptions = {
+            cargos: await this.cargoModel.getAll(),
+            ministerios: await this.ministerioModel.getAll()
+        };
+        this.cargoView.render(cargoOptions);
     };
 
 }

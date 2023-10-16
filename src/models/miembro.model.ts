@@ -140,6 +140,7 @@ export class MiembroModel {
     public async delete(id: number) {
         const client = await this.dbConexion.connect();
         try {
+            await new RelacionModel(undefined).deleteByMiembro(id);
             const result = await client.query('DELETE FROM miembro WHERE id = $1', [id]);
             return result;
         } catch (error) {

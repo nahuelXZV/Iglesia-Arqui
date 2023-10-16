@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
-    <title>Cargos</title>
+    <title>Historial Cargos</title>
 </head>
 
 <body class="bg-gray-100">
@@ -27,13 +27,13 @@
                     </li>
                     <li>
                         <a href="/cargo"
-                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
                             Cargos </a>
                     </li>
                     <li>
                         <a href="/historial"
-                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0  ">
-                            Historial Cargo </a>
+                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
+                            Historial Cargos </a>
                     </li>
                     <li>
                         <a href="/miembros"
@@ -52,7 +52,7 @@
 
     <!-- titulo que diga ministerios -->
     <div class="flex justify-center mb-5">
-        <h1 class="text-3xl font-bold">Cargos</h1>
+        <h1 class="text-3xl font-bold">Historial de cargos</h1>
     </div>
 
     <div class="grid grid-cols-2 px-10 pt-2">
@@ -66,22 +66,38 @@
                         placeholder="" required>
                 </div>
                 <div class="mb-2">
-                    <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Nombre</label>
-                    <input type="text" id="nombre" name="nombre"
+                    <label for="fecha_inicio" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Fecha Inicio</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                        placeholder="Nombre..." required>
+                        required>
                 </div>
-                <div class="mb-4">
-                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Ministerio</label>
-                    <select id="ministerio_id" name="ministerio_id"
+                <div class=" mb-2">
+                    <label for="fecha_final" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Fecha Final</label>
+                    <input type="date" id="fecha_final" name="fecha_final"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                        <option selected>Escoge un ministerio</option>
-                        <% if (ministerios) { %>
-                            <% ministerios.forEach((ministerio)=> { %>
-                                <option value="<%= ministerio.id %>">
-                                    <%= ministerio.nombre %>
+                </div>
+                <div class=" mb-4">
+                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Estado</label>
+                    <select id="estado" name="estado"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                        <option selected>Escoge un estado</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+                <div class=" mb-4">
+                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Miembro</label>
+                    <select id="miembro_id" name="miembro_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                        <option selected>Escoge un miembro</option>
+                        <% if (miembros) { %>
+                            <% miembros.forEach((miembro)=> { %>
+                                <option value="<%= miembro.id %>">
+                                    <%= miembro.nombre %>
                                 </option>
                                 <% }); %>
                                     <% } else { %>
@@ -89,12 +105,22 @@
                                         <% } %>
                     </select>
                 </div>
-
-                <div class="mb-4">
-                    <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 ">
-                        Descripcion</label>
-                    <textarea name="descripcion" id="descripcion" cols="30" rows="5" placeholder="Descripcion..."
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "></textarea>
+                <div class=" mb-4">
+                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 ">
+                        Cargo</label>
+                    <select id="cargo_id" name="cargo_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                        <option selected>Escoge un miembro</option>
+                        <% if (cargos) { %>
+                            <% cargos.forEach((miembro)=> { %>
+                                <option value="<%= miembro.id %>">
+                                    <%= miembro.nombre %>
+                                </option>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p>No hay datos disponibles.</p>
+                                        <% } %>
+                    </select>
                 </div>
 
                 <button type="submit"
@@ -112,13 +138,19 @@
                             ID
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Nombre
+                            Miembro
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Descripcion
+                            Cargo
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Ministerio
+                            Fecha de inicio
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Fecha de fin
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Estado
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Acciones
@@ -126,26 +158,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% if (cargos) { %>
-                        <% cargos.forEach((dato)=> { %>
+                    <% if (historial) { %>
+                        <% historial.forEach((dato)=> { %>
                             <tr class="bg-white border border-1 ">
                                 <td class="px-6 py-4">
                                     <%= dato.id %>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <%= dato.nombre %>
+                                    <%= dato.miembro_nombre %>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <%= dato.descripcion%>
+                                    <%= dato.cargo_nombre%>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <%= dato.ministerio %>
+                                    <%= dato.fecha_inicio %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.fecha_final %>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <%= dato.estado %>
                                 </td>
                                 <td class="px-6 py-4">
                                     <button class="text-blue-400 hover:text-blue-600" onclick="ponerDatosForm(event)"
-                                        data-id="<%= dato.id %>" data-nombre="<%= dato.nombre %>"
-                                        data-descripcion="<%= dato.descripcion %>"
-                                        data-ministerio_id="<%= dato.ministerio_id %>">
+                                        data-id="<%= dato.id %>" data-fecha_inicio="<%= dato.fecha_inicio %>"
+                                        data-fecha_final="<%= dato.fecha_final %>" data-estado="<%= dato.estado %>"
+                                        data-miembro_id="<%= dato.miembro_id %>" data-cargo_id="<%= dato.cargo_id %>">
                                         Actualizar
                                     </button>
                                     <button class="text-blue-400 hover:text-blue-600" onclick="eliminarDatos(event)"
@@ -179,7 +217,7 @@
             const datos = {};
             formData.forEach((valor, clave) => { datos[clave] = valor; });
             const metodo = 'POST';
-            const endPoint = datos.id ? `/cargo/update` : '/cargo/create';
+            const endPoint = datos.id ? `/historial/update` : '/historial/create';
             formulario.method = metodo;
             formulario.action = endPoint;
             formulario.submit();
@@ -196,36 +234,56 @@
             idInput.value = id;
             deleteForm.appendChild(idInput);
             deleteForm.method = 'POST';
-            deleteForm.action = `/cargo/delete`;
+            deleteForm.action = `/historial/delete`;
             deleteForm.submit();
         }
 
         function ponerDatosForm(event) {
             const id = event.currentTarget.getAttribute('data-id');
-            const nombre = event.currentTarget.getAttribute('data-nombre');
-            const descripcion = event.currentTarget.getAttribute('data-descripcion');
-            const ministerio_id = event.currentTarget.getAttribute('data-ministerio_id');
+            const fecha_inicio = event.currentTarget.getAttribute('data-fecha_inicio');
+            const fecha_final = event.currentTarget.getAttribute('data-fecha_final');
+            const estado = event.currentTarget.getAttribute('data-estado');
+            const miembro_id = event.currentTarget.getAttribute('data-miembro_id');
+            const cargo_id = event.currentTarget.getAttribute('data-cargo_id');
+
             const formulario = document.getElementById('formulario');
-            const nombreInput = document.getElementById('nombre');
-            const idInput = document.getElementById('id');
             const idCard = document.getElementById('id-card');
-            const descripcionInput = document.getElementById('descripcion');
-            const ministerio_idInput = document.getElementById('ministerio_id');
-            nombreInput.value = nombre;
+
+            const idInput = document.getElementById('id');
+            const fecha_inicioInput = document.getElementById('fecha_inicio');
+            const fecha_finalInput = document.getElementById('fecha_final');
+            const estadoInput = document.getElementById('estado');
+            const miembro_idInput = document.getElementById('miembro_id');
+            const cargo_idInput = document.getElementById('cargo_id');
+
+            console.log(fecha_inicio);
+            console.log(fecha_final);
+
             idInput.value = id;
-            descripcionInput.value = descripcion;
-            ministerio_idInput.value = ministerio_id;
+            estadoInput.value = estado;
+            miembro_idInput.value = miembro_id;
+            cargo_idInput.value = cargo_id;
+            fecha_inicioInput.setAttribute('value', fecha_inicio);
+            fecha_finalInput.setAttribute('value', fecha_final);
             idCard.style.display = 'block';
         }
 
         function limpiarForm() {
-            const nombreInput = document.getElementById('nombre');
-            const idInput = document.getElementById('id');
             const idCard = document.getElementById('id-card');
-            const descripcionInput = document.getElementById('descripcion');
-            nombreInput.value = '';
+
+            const idInput = document.getElementById('id');
+            const fecha_inicioInput = document.getElementById('fecha_inicio');
+            const fecha_finalInput = document.getElementById('fecha_final');
+            const estadoInput = document.getElementById('estado');
+            const miembro_idInput = document.getElementById('miembro_id');
+            const cargo_idInput = document.getElementById('cargo_id');
+
             idInput.value = '';
-            descripcionInput.value = '';
+            fecha_inicioInput.setAttribute('value', '');
+            fecha_finalInput.setAttribute('value', '');
+            estadoInput.value = '';
+            miembro_idInput.value = '';
+            cargo_idInput.value = '';
             idCard.style.display = 'none';
         }
 

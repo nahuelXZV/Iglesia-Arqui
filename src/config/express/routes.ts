@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { MinisterioController, CargoController, MiembroController, EventoController } from '../../controllers/';
+import { MinisterioController, CargoController, MiembroController, EventoController, HistorialCargoController } from '../../controllers/';
 
 export class AppRoutes {
 
@@ -38,6 +38,13 @@ export class AppRoutes {
         router.post('/eventos/create', eventoController.store);
         router.post('/eventos/update', eventoController.update);
         router.post('/eventos/delete', eventoController.delete);
+
+        // Historial Cargo
+        const historialCargoController = new HistorialCargoController();
+        router.get('/historial', historialCargoController.index);
+        router.post('/historial/create', historialCargoController.store);
+        router.post('/historial/update', historialCargoController.update);
+        router.post('/historial/delete', historialCargoController.delete);
 
         return router;
     }

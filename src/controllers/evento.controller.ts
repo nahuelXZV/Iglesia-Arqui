@@ -28,9 +28,14 @@ export class EventoController {
             arrayParticipantes.push(item.participante);
         });
         this.eventoView = new EventoView(req, res);
+        this.miembroModel = new MiembroModel(undefined);
         this.eventoModel = new EventoModel({ ...evento, arrayParticipantes });
         await this.eventoModel.store();
-        this.eventoView.redirect();
+        const eventoOptions: EventoOptions = {
+            eventos: await this.eventoModel.getAll(),
+            miembros: await this.miembroModel.getAll()
+        }
+        this.eventoView.render(eventoOptions);
     };
 
     public update = async (req: Request, res: Response) => {
@@ -41,6 +46,7 @@ export class EventoController {
             arrayParticipantes.push(item.participante);
         });
         this.eventoView = new EventoView(req, res);
+        this.miembroModel = new MiembroModel(undefined);
         this.eventoModel = new EventoModel({
             id: +id,
             nombre,
@@ -50,15 +56,24 @@ export class EventoController {
             arrayParticipantes
         });
         await this.eventoModel.update();
-        this.eventoView.redirect();
+        const eventoOptions: EventoOptions = {
+            eventos: await this.eventoModel.getAll(),
+            miembros: await this.miembroModel.getAll()
+        }
+        this.eventoView.render(eventoOptions);
     };
 
     public delete = async (req: Request, res: Response) => {
         const { id } = req.body;
         this.eventoModel = new EventoModel(undefined);
+        this.miembroModel = new MiembroModel(undefined);
         this.eventoView = new EventoView(req, res);
         await this.eventoModel.delete(+id);
-        this.eventoView.redirect();
+        const eventoOptions: EventoOptions = {
+            eventos: await this.eventoModel.getAll(),
+            miembros: await this.miembroModel.getAll()
+        }
+        this.eventoView.render(eventoOptions);
     };
 
 }

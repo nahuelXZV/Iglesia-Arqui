@@ -21,7 +21,7 @@ export class MinisterioView {
         return this.res.render(this.view, { ministerios });
     }
 
-    redirect() { 
+    redirect() {
         return this.res.redirect('/ministerio');
     }
 

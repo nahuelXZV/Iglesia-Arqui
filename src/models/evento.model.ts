@@ -126,6 +126,7 @@ export class EventoModel {
     public async delete(id: number) {
         const client = await this.dbConexion.connect();
         try {
+            await new ParticipoModel(undefined).deleteByEvento(id);
             const result = await client.query('DELETE FROM evento WHERE id = $1', [id]);
             return result;
         } catch (error) {

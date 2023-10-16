@@ -20,7 +20,8 @@ export class MinisterioController {
         this.ministerioModel = new MinisterioModel(ministerio);
         this.ministerioView = new MinisterioView(req, res);
         await this.ministerioModel.store();
-        this.ministerioView.redirect();
+        const ministerioOptions: MinisterioOptions = { ministerios: await this.ministerioModel.getAll() };
+        this.ministerioView.render(ministerioOptions);
     };
 
     public update = async (req: Request, res: Response) => {
@@ -31,7 +32,8 @@ export class MinisterioController {
             nombre
         });
         await this.ministerioModel.update();
-        this.ministerioView.redirect();
+        const ministerioOptions: MinisterioOptions = { ministerios: await this.ministerioModel.getAll() };
+        this.ministerioView.render(ministerioOptions);
     };
 
     public delete = async (req: Request, res: Response) => {
@@ -39,7 +41,8 @@ export class MinisterioController {
         this.ministerioView = new MinisterioView(req, res);
         const { id } = req.body;
         await this.ministerioModel.delete(+id);
-        this.ministerioView.redirect();
+        const ministerioOptions: MinisterioOptions = { ministerios: await this.ministerioModel.getAll() };
+        this.ministerioView.render(ministerioOptions);
     };
 
 }
