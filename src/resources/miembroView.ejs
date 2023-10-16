@@ -106,7 +106,7 @@
                         Invitado por</label>
                     <select id="invitado_por" name="invitado_por"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                        <option selected>Escoge un miembro </option>
+                        <option selected value="">Escoge un miembro </option>
                         <% if (miembros) { %>
                             <% miembros.forEach((miembro)=> { %>
                                 <option value="<%= miembro.id %>">
