@@ -19,7 +19,7 @@ export class MiembroController {
     public store = async (req: Request, res: Response) => {
         const { nombre, telefono, correo, fecha_nacimiento, direccion, invitado_por } = req.body;
         const miembro: Miembro = { nombre, telefono, correo, fecha_nacimiento, direccion };
-        invitado_por == "" ? miembro.invitado_por = undefined : miembro.invitado_por = +invitado_por;
+        invitado_por == "" ? "": miembro.invitado_por = +invitado_por;
         const relaciones = JSON.parse(req.body.relaciones);
         this.miembroModel = new MiembroModel({ ...miembro, relaciones });
         this.miembroView = new MiembroView(req, res);
