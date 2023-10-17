@@ -2,7 +2,6 @@ import { QueryResult } from "pg";
 import { DBConection, db } from "../config/database/db";
 
 export interface Relacion {
-    id?: number;
     tipo_relacion: string;
     miembro_id_base: number;
     miembro_id_relacionado: number;
@@ -12,17 +11,15 @@ export interface Relacion {
 export class RelacionModel {
 
     private dbConexion: DBConection;
-    public id: number;
     public tipo_relacion: string;
     public miembro_id_base: number;
     public miembro_id_relacionado: number;
 
     constructor(data: Relacion | undefined) {
-        const { tipo_relacion, miembro_id_base, miembro_id_relacionado, id } = data || {};
+        const { tipo_relacion, miembro_id_base, miembro_id_relacionado } = data || {};
         this.tipo_relacion = tipo_relacion || "";
         this.miembro_id_base = miembro_id_base || 0;
         this.miembro_id_relacionado = miembro_id_relacionado || 0;
-        this.id = id || 0;
         this.dbConexion = new db();
     }
 
@@ -38,10 +35,10 @@ export class RelacionModel {
         }
     }
 
-    public async getOne(id: number): Promise<Relacion | undefined> {
+    public async getOne(miembro_id_base: number, miembro_id_relacionado: number): Promise<Relacion | undefined> {
         try {
             const client = await this.dbConexion.connect();
-            const result = await client.query('SELECT * FROM relacion WHERE id = $1', [id]);
+            const result = await client.query('SELECT * FROM relacion WHERE miembro_id_base = $1 and miembro_id_relacionado = $2', [miembro_id_base, miembro_id_relacionado]);
             return await this.formatearDato(result);
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
@@ -53,9 +50,7 @@ export class RelacionModel {
     public async store() {
         try {
             const client = await this.dbConexion.connect();
-            const id = await client.query('SELECT MAX(id) FROM relacion');
-            this.id = id.rows[0].max + 1;
-            const result = await client.query('INSERT INTO relacion(id, tipo_relacion, miembro_id_base,miembro_id_relacionado) VALUES($1,$2,$3,$4)', [this.id, this.tipo_relacion, this.miembro_id_base, this.miembro_id_relacionado]);
+            const result = await client.query('INSERT INTO relacion( tipo_relacion, miembro_id_base, miembro_id_relacionado) VALUES($1,$2,$3)', [this.tipo_relacion, this.miembro_id_base, this.miembro_id_relacionado]);
             return result;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
@@ -67,7 +62,7 @@ export class RelacionModel {
     public async update() {
         try {
             const client = await this.dbConexion.connect();
-            const result = await client.query('UPDATE relacion SET tipo_relacion = $1, miembro_id_base=$2,miembro_id_relacionado=$3 WHERE id = $4', [this.tipo_relacion, this.miembro_id_base, this.miembro_id_relacionado, this.id]);
+            const result = await client.query('UPDATE relacion SET tipo_relacion = $1 WHERE miembro_id_base=$2 and miembro_id_relacionado=$3', [this.tipo_relacion, this.miembro_id_base, this.miembro_id_relacionado]);
             return result;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
@@ -76,10 +71,10 @@ export class RelacionModel {
         }
     }
 
-    public async delete(id: number) {
+    public async delete(miembro_id_base: number, miembro_id_relacionado: number) {
         try {
             const client = await this.dbConexion.connect();
-            const result = await client.query('DELETE FROM relacion WHERE id = $1', [id]);
+            const result = await client.query('DELETE FROM relacion WHERE miembro_id_base = $1 and miembro_id_relacionado = $2', [miembro_id_base, miembro_id_relacionado]);
             return result;
         } catch (error) {
             console.error('Error al ejecutar la consulta:', error);
@@ -104,9 +99,8 @@ export class RelacionModel {
     private async formatearDatos(data: QueryResult): Promise<Relacion[]> {
         const { rows } = data;
         return rows.map((item: any) => {
-            const { id, tipo_relacion, miembro_id_base, miembro_id_relacionado, nombre_miembro } = item;
+            const { tipo_relacion, miembro_id_base, miembro_id_relacionado, nombre_miembro } = item;
             return {
-                id,
                 tipo_relacion,
                 miembro_id_base,
                 miembro_id_relacionado,
@@ -117,9 +111,8 @@ export class RelacionModel {
 
     private async formatearDato(data: QueryResult): Promise<Relacion> {
         const { rows } = data;
-        const { id, tipo_relacion, miembro_id_base, miembro_id_relacionado, nombre_miembro } = rows[0];
+        const { tipo_relacion, miembro_id_base, miembro_id_relacionado, nombre_miembro } = rows[0];
         return {
-            id,
             tipo_relacion,
             miembro_id_base,
             miembro_id_relacionado,

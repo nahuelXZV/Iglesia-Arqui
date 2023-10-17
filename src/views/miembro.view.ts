@@ -20,9 +20,4 @@ export class MiembroView {
         const { miembros } = miembroOptions;
         return this.res.render(this.view, { miembros });
     }
-
-    redirect() {
-        return this.res.redirect('/miembros');
-    }
-
 }
